@@ -1,0 +1,65 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Chatbot</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+
+<body>
+    <div id="chat-container">
+        <h1>AI Chatbot</h1>
+        <div id="chat-box">
+            <!-- User and bot messages will be added here -->
+        </div>
+        <div id="loading-indicator">
+            <span class="dots"></span><span class="dots"></span><span class="dots"></span>
+        </div>
+        <form id="chat-form">
+            <input type="text" id="question" name="question" required placeholder="Ask a question...">
+            <button type="submit">Send</button>
+        </form>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            $("#chat-form").on("submit", function (event) {
+                event.preventDefault();
+                const question = $("#question").val();
+
+                // Show user messages
+                $("#chat-box").append(`<div class="message user-message">${question}</div>`);
+                $("#question").val("");
+
+                // Bekleme animasyonunu göster
+                $("#loading-indicator").show();
+
+                $.ajax({
+                    url: "/ask/",
+                    method: "POST",
+                    data: {
+                        question: question,
+                        csrfmiddlewaretoken: '{{ csrf_token }}'
+                    },
+                    success: function (response) {
+                        // Hide waiting animation
+                        $("#loading-indicator").hide();
+
+                        // Show bot reply
+                        $("#chat-box").append(`<div class="message bot-message">${response.answer}</div>`);
+                    },
+                    error: function (error) {
+                        $("#loading-indicator").hide();
+                        $("#chat-box").append(`<div class="message bot-message">An error occurred. Please try again.</div>`);
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>
