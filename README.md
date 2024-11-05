@@ -10,21 +10,27 @@
 
 <h2>🛜 To make it work: </h2>
 </br>
-<p>1.</p>
+<p>1. Clone project</p>
+
+```
+git clone git@github.com:TheHormat/AI__Chatbot.git
+```
+</br>
+<p>2.</p>
 
 ```
 poetry shell
 ```
 </br>
 
-<p>2.</p>
+<p>3.</p>
 
 ```
 poetry update
 ```
 </br>
 
-<p></p>
+<p>4.</p>
 
 ```
 python manage.py runserver
